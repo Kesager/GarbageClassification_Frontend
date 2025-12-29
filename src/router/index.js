@@ -6,8 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/home'  // 将根路径重定向到 /home
     },
     {
       path: '/home',
