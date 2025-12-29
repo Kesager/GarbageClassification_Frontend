@@ -438,7 +438,7 @@
 .logout-btn {
   width: 100%;
   background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
-  color: var(--text-inverse);
+  color: var(--text-primary);
   border: none;
   border-radius: var(--border-radius-xl);
   padding: var(--space-4);
@@ -456,8 +456,10 @@
 
 .logout-btn:hover {
   transform: translateY(-1px);
+  color: var(--text-inverse);
   box-shadow: var(--shadow-md);
   background: linear-gradient(135deg, var(--color-error-dark), var(--color-error));
+  background-color: var(--color-harmful);
 }
 
 .logout-btn:active {
