@@ -11,13 +11,8 @@
         <div class="search-section">
           <div class="search-box">
             <div class="search-icon">🔍</div>
-            <input
-              type="text"
-              placeholder="搜索垃圾名称或类别"
-              class="search-input"
-              v-model="searchQuery"
-              @keyup.enter="handleSearch"
-            >
+            <input type="text" placeholder="搜索垃圾名称或类别" class="search-input" v-model="searchQuery"
+              @keyup.enter="handleSearch">
             <button class="search-btn" @click="handleSearch">
               搜索
             </button>
@@ -32,11 +27,7 @@
         <div class="banner-swiper">
           <div class="swiper-inner">
             <div class="swiper-wrapper" ref="swiperWrapper">
-              <div
-                class="swiper-slide"
-                v-for="(slide, index) in slides"
-                :key="index"
-              >
+              <div class="swiper-slide" v-for="(slide, index) in slides" :key="index">
                 <img :src="slide" alt="垃圾分类宣传图" class="slide-img">
                 <div class="slide-overlay">
                   <div class="slide-content">
@@ -49,13 +40,8 @@
 
             <!-- 轮播指示器 -->
             <div class="swiper-pagination">
-              <div
-                class="pagination-item"
-                v-for="(slide, index) in slides"
-                :key="index"
-                :class="{ active: currentIndex === index }"
-                @click="switchSlide(index)"
-              ></div>
+              <div class="pagination-item" v-for="(slide, index) in slides" :key="index"
+                :class="{ active: currentIndex === index }" @click="switchSlide(index)"></div>
             </div>
 
             <!-- 左右切换箭头 -->
@@ -79,13 +65,9 @@
         </div>
 
         <div class="garbage-grid">
-          <router-link
-            to="/lajijiansuo?category=recyclable"
-            class="garbage-card recyclable"
-            :class="{ 'card-hover': hoveredCard === 'recyclable' }"
-            @mouseenter="hoveredCard = 'recyclable'"
-            @mouseleave="hoveredCard = null"
-          >
+          <router-link to="/lajijiansuo?category=recyclable" class="garbage-card recyclable"
+            :class="{ 'card-hover': hoveredCard === 'recyclable' }" @mouseenter="hoveredCard = 'recyclable'"
+            @mouseleave="hoveredCard = null">
             <div class="card-icon">♻️</div>
             <div class="card-content">
               <h3 class="card-title">可回收物</h3>
@@ -94,13 +76,9 @@
             <div class="card-arrow">→</div>
           </router-link>
 
-          <router-link
-            to="/lajijiansuo?category=kitchen"
-            class="garbage-card kitchen"
-            :class="{ 'card-hover': hoveredCard === 'kitchen' }"
-            @mouseenter="hoveredCard = 'kitchen'"
-            @mouseleave="hoveredCard = null"
-          >
+          <router-link to="/lajijiansuo?category=kitchen" class="garbage-card kitchen"
+            :class="{ 'card-hover': hoveredCard === 'kitchen' }" @mouseenter="hoveredCard = 'kitchen'"
+            @mouseleave="hoveredCard = null">
             <div class="card-icon">🥗</div>
             <div class="card-content">
               <h3 class="card-title">厨余垃圾</h3>
@@ -109,13 +87,9 @@
             <div class="card-arrow">→</div>
           </router-link>
 
-          <router-link
-            to="/lajijiansuo?category=harmful"
-            class="garbage-card harmful"
-            :class="{ 'card-hover': hoveredCard === 'harmful' }"
-            @mouseenter="hoveredCard = 'harmful'"
-            @mouseleave="hoveredCard = null"
-          >
+          <router-link to="/lajijiansuo?category=harmful" class="garbage-card harmful"
+            :class="{ 'card-hover': hoveredCard === 'harmful' }" @mouseenter="hoveredCard = 'harmful'"
+            @mouseleave="hoveredCard = null">
             <div class="card-icon">⚠️</div>
             <div class="card-content">
               <h3 class="card-title">有害垃圾</h3>
@@ -124,13 +98,9 @@
             <div class="card-arrow">→</div>
           </router-link>
 
-          <router-link
-            to="/lajijiansuo?category=other"
-            class="garbage-card other"
-            :class="{ 'card-hover': hoveredCard === 'other' }"
-            @mouseenter="hoveredCard = 'other'"
-            @mouseleave="hoveredCard = null"
-          >
+          <router-link to="/lajijiansuo?category=other" class="garbage-card other"
+            :class="{ 'card-hover': hoveredCard === 'other' }" @mouseenter="hoveredCard = 'other'"
+            @mouseleave="hoveredCard = null">
             <div class="card-icon">🗑️</div>
             <div class="card-content">
               <h3 class="card-title">其他垃圾</h3>
@@ -179,7 +149,8 @@
 .home-page {
   min-height: 100vh;
   background-color: var(--bg-secondary);
-  padding-bottom: 6rem; /* 为导航栏留出空间 */
+  padding-bottom: 6rem;
+  /* 为导航栏留出空间 */
 }
 
 /* ===== 容器样式 ===== */
@@ -540,9 +511,17 @@
 }
 
 @keyframes cardPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* 不同类型的卡片颜色 */
@@ -887,7 +866,7 @@
   }
 
   .garbage-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);  /* 修改为最多显示3列，而不是4列 */
     gap: var(--space-8);
     margin-top: var(--space-10);
   }
@@ -919,503 +898,503 @@
   }
 }
 </style>
-  opacity: 0;
-  visibility: hidden;
+opacity: 0;
+visibility: hidden;
 }
 
 .banner-swiper:hover .swiper-btn {
-  opacity: 1;
-  visibility: visible;
+opacity: 1;
+visibility: visible;
 }
 
 .swiper-prev {
-  left: 15px;
+left: 15px;
 }
 
 .swiper-next {
-  right: 15px;
+right: 15px;
 }
 
 .swiper-btn:hover {
-  background-color: var(--white);
-  transform: translateY(-50%) scale(1.1);
+background-color: var(--white);
+transform: translateY(-50%) scale(1.1);
 }
 
 /* 分类区域 */
 .category-section {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 30px;
+width: 90%;
+max-width: 1000px;
+margin: 0 auto 30px;
 }
 
 .category-title {
-  text-align: center;
-  font-size: clamp(1.1rem, 4vw, 1.3rem);
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 20px;
-  position: relative;
-  padding-bottom: 10px;
+text-align: center;
+font-size: clamp(1.1rem, 4vw, 1.3rem);
+font-weight: 600;
+color: var(--text-dark);
+margin-bottom: 20px;
+position: relative;
+padding-bottom: 10px;
 }
 
 .category-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background-color: var(--primary-green);
-  border-radius: 3px;
+content: '';
+position: absolute;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 60px;
+height: 3px;
+background-color: var(--primary-green);
+border-radius: 3px;
 }
 
 /* 分类卡片优化 */
 .garbage-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 15px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+gap: 15px;
 }
 
 .card-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 160px;
-  border-radius: var(--radius);
-  padding: 15px;
-  color: var(--white);
-  text-decoration: none;
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 160px;
+border-radius: var(--radius);
+padding: 15px;
+color: var(--white);
+text-decoration: none;
+transition: var(--transition);
+position: relative;
+overflow: hidden;
+box-shadow: var(--shadow);
 }
 
 .card-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: var(--transition);
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.1);
+opacity: 0;
+transition: var(--transition);
 }
 
 .card-link:hover {
-  transform: translateY(-8px) scale(1.02);
+transform: translateY(-8px) scale(1.02);
 }
 
 .card-link:hover::before {
-  opacity: 1;
+opacity: 1;
 }
 
 .card-icon {
-  font-size: 2rem;
-  margin-bottom: 15px;
-  transition: var(--transition);
+font-size: 2rem;
+margin-bottom: 15px;
+transition: var(--transition);
 }
 
 .card-link:hover .card-icon {
-  transform: scale(1.2);
+transform: scale(1.2);
 }
 
 .card-label {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 8px;
+font-size: 1.1rem;
+font-weight: bold;
+margin-bottom: 8px;
 }
 
 .card-text {
-  font-size: 0.85rem;
-  text-align: center;
-  opacity: 0.9;
+font-size: 0.85rem;
+text-align: center;
+opacity: 0.9;
 }
 
 .card-recyclable {
-  background-color: var(--recyclable);
+background-color: var(--recyclable);
 }
 
 .card-other {
-  background-color: var(--other);
+background-color: var(--other);
 }
 
 .card-kitchen {
-  background-color: var(--kitchen);
+background-color: var(--kitchen);
 }
 
 .card-harmful {
-  background-color: var(--harmful);
+background-color: var(--harmful);
 }
 
 /* 环保小贴士 */
 .tips-section {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 20px;
+width: 90%;
+max-width: 1000px;
+margin: 0 auto 20px;
 }
 
 .tips-card {
-  background-color: var(--white);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  border-left: 4px solid var(--primary-green);
+background-color: var(--white);
+border-radius: var(--radius);
+padding: 20px;
+box-shadow: var(--shadow);
+border-left: 4px solid var(--primary-green);
 }
 
 .tips-title {
-  font-size: 1.1rem;
-  color: var(--text-dark);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
+font-size: 1.1rem;
+color: var(--text-dark);
+margin-bottom: 10px;
+display: flex;
+align-items: center;
 }
 
 .tips-title::before {
-  content: '💡';
-  margin-right: 8px;
+content: '💡';
+margin-right: 8px;
 }
 
 .tips-content {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  line-height: 1.6;
+font-size: 0.9rem;
+color: var(--text-light);
+line-height: 1.6;
 }
 
 /* 响应式设计 */
 @media (max-width: 480px) {
-  .home-container {
-    padding: 15px;
-  }
+.home-container {
+padding: 15px;
+}
 
-  .banner-section {
-    margin-bottom: 20px;
-  }
+.banner-section {
+margin-bottom: 20px;
+}
 
-  .banner-swiper {
-    height: 180px;
-    border-radius: 16px;
-  }
+.banner-swiper {
+height: 180px;
+border-radius: 16px;
+}
 
-  .swiper-slide {
-    padding: 15px;
-  }
+.swiper-slide {
+padding: 15px;
+}
 
-  .banner-title {
-    font-size: 1.4rem;
-    margin-bottom: 8px;
-  }
+.banner-title {
+font-size: 1.4rem;
+margin-bottom: 8px;
+}
 
-  .banner-desc {
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
+.banner-desc {
+font-size: 0.85rem;
+line-height: 1.4;
+}
 
-  .search-section {
-    margin-bottom: 25px;
-  }
+.search-section {
+margin-bottom: 25px;
+}
 
-  .search-container {
-    padding: 20px 15px;
-  }
+.search-container {
+padding: 20px 15px;
+}
 
-  .search-title {
-    font-size: 1.3rem;
-    margin-bottom: 12px;
-  }
+.search-title {
+font-size: 1.3rem;
+margin-bottom: 12px;
+}
 
-  .search-input-wrapper {
-    margin-bottom: 15px;
-  }
+.search-input-wrapper {
+margin-bottom: 15px;
+}
 
-  .search-input {
-    height: 44px;
-    font-size: 1rem;
-  }
+.search-input {
+height: 44px;
+font-size: 1rem;
+}
 
-  .search-btn {
-    padding: 12px 20px;
-    font-size: 0.95rem;
-  }
+.search-btn {
+padding: 12px 20px;
+font-size: 0.95rem;
+}
 
-  .garbage-cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
+.garbage-cards {
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+margin-bottom: 20px;
+}
 
-  .garbage-card {
-    padding: 16px;
-    min-height: 120px;
-  }
+.garbage-card {
+padding: 16px;
+min-height: 120px;
+}
 
-  .card-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-  }
+.card-icon {
+width: 50px;
+height: 50px;
+font-size: 1.5rem;
+margin-bottom: 12px;
+}
 
-  .card-title {
-    font-size: 1rem;
-    margin-bottom: 6px;
-  }
+.card-title {
+font-size: 1rem;
+margin-bottom: 6px;
+}
 
-  .card-desc {
-    font-size: 0.8rem;
-    line-height: 1.3;
-  }
+.card-desc {
+font-size: 0.8rem;
+line-height: 1.3;
+}
 
-  .quick-actions {
-    padding: 20px 15px;
-  }
+.quick-actions {
+padding: 20px 15px;
+}
 
-  .actions-title {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-  }
+.actions-title {
+font-size: 1.2rem;
+margin-bottom: 15px;
+}
 
-  .actions-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+.actions-grid {
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+}
 
-  .action-btn {
-    padding: 16px 12px;
-    font-size: 0.9rem;
-  }
+.action-btn {
+padding: 16px 12px;
+font-size: 0.9rem;
+}
 
-  .action-icon {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-  }
+.action-icon {
+font-size: 1.3rem;
+margin-bottom: 8px;
+}
 
-  .card-link {
-    height: 140px;
-  }
+.card-link {
+height: 140px;
+}
 
-  .tips-card {
-    padding: 15px;
-  }
+.tips-card {
+padding: 15px;
+}
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
-  .home-container {
-    padding: 20px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
+.home-container {
+padding: 20px;
+max-width: 700px;
+margin: 0 auto;
+}
 
-  .banner-section {
-    margin-bottom: 25px;
-  }
+.banner-section {
+margin-bottom: 25px;
+}
 
-  .banner-swiper {
-    height: 200px;
-    border-radius: 20px;
-  }
+.banner-swiper {
+height: 200px;
+border-radius: 20px;
+}
 
-  .swiper-slide {
-    padding: 20px;
-  }
+.swiper-slide {
+padding: 20px;
+}
 
-  .banner-title {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-  }
+.banner-title {
+font-size: 1.6rem;
+margin-bottom: 10px;
+}
 
-  .banner-desc {
-    font-size: 0.9rem;
-  }
+.banner-desc {
+font-size: 0.9rem;
+}
 
-  .search-section {
-    margin-bottom: 30px;
-  }
+.search-section {
+margin-bottom: 30px;
+}
 
-  .search-container {
-    padding: 25px 20px;
-  }
+.search-container {
+padding: 25px 20px;
+}
 
-  .search-title {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-  }
+.search-title {
+font-size: 1.4rem;
+margin-bottom: 15px;
+}
 
-  .search-input-wrapper {
-    margin-bottom: 18px;
-  }
+.search-input-wrapper {
+margin-bottom: 18px;
+}
 
-  .search-input {
-    height: 48px;
-    font-size: 1.05rem;
-  }
+.search-input {
+height: 48px;
+font-size: 1.05rem;
+}
 
-  .search-btn {
-    padding: 14px 24px;
-    font-size: 1rem;
-  }
+.search-btn {
+padding: 14px 24px;
+font-size: 1rem;
+}
 
-  .garbage-cards {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 25px;
-  }
+.garbage-cards {
+grid-template-columns: repeat(3, 1fr);
+gap: 16px;
+margin-bottom: 25px;
+}
 
-  .garbage-card {
-    padding: 20px;
-    min-height: 140px;
-  }
+.garbage-card {
+padding: 20px;
+min-height: 140px;
+}
 
-  .card-icon {
-    width: 55px;
-    height: 55px;
-    font-size: 1.6rem;
-    margin-bottom: 14px;
-  }
+.card-icon {
+width: 55px;
+height: 55px;
+font-size: 1.6rem;
+margin-bottom: 14px;
+}
 
-  .card-title {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-  }
+.card-title {
+font-size: 1.1rem;
+margin-bottom: 8px;
+}
 
-  .card-desc {
-    font-size: 0.85rem;
-  }
+.card-desc {
+font-size: 0.85rem;
+}
 
-  .quick-actions {
-    padding: 25px 20px;
-  }
+.quick-actions {
+padding: 25px 20px;
+}
 
-  .actions-title {
-    font-size: 1.3rem;
-    margin-bottom: 18px;
-  }
+.actions-title {
+font-size: 1.3rem;
+margin-bottom: 18px;
+}
 
-  .actions-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
+.actions-grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 16px;
+}
 
-  .action-btn {
-    padding: 18px 14px;
-    font-size: 0.95rem;
-  }
+.action-btn {
+padding: 18px 14px;
+font-size: 0.95rem;
+}
 
-  .action-icon {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-  }
+.action-icon {
+font-size: 1.4rem;
+margin-bottom: 10px;
+}
 }
 
 @media (min-width: 768px) {
-  .home-container {
-    padding: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+.home-container {
+padding: 30px;
+max-width: 1200px;
+margin: 0 auto;
+}
 
-  .banner-section {
-    margin-bottom: 35px;
-  }
+.banner-section {
+margin-bottom: 35px;
+}
 
-  .banner-swiper {
-    height: 250px;
-    border-radius: 24px;
-  }
+.banner-swiper {
+height: 250px;
+border-radius: 24px;
+}
 
-  .swiper-slide {
-    padding: 30px;
-  }
+.swiper-slide {
+padding: 30px;
+}
 
-  .banner-title {
-    font-size: 2rem;
-    margin-bottom: 12px;
-  }
+.banner-title {
+font-size: 2rem;
+margin-bottom: 12px;
+}
 
-  .banner-desc {
-    font-size: 1rem;
-  }
+.banner-desc {
+font-size: 1rem;
+}
 
-  .search-section {
-    margin-bottom: 40px;
-  }
+.search-section {
+margin-bottom: 40px;
+}
 
-  .search-container {
-    padding: 35px 30px;
-  }
+.search-container {
+padding: 35px 30px;
+}
 
-  .search-title {
-    font-size: 1.6rem;
-    margin-bottom: 20px;
-  }
+.search-title {
+font-size: 1.6rem;
+margin-bottom: 20px;
+}
 
-  .search-input-wrapper {
-    margin-bottom: 20px;
-  }
+.search-input-wrapper {
+margin-bottom: 20px;
+}
 
-  .search-input {
-    height: 52px;
-    font-size: 1.1rem;
-  }
+.search-input {
+height: 52px;
+font-size: 1.1rem;
+}
 
-  .search-btn {
-    padding: 16px 28px;
-    font-size: 1.05rem;
-  }
+.search-btn {
+padding: 16px 28px;
+font-size: 1.05rem;
+}
 
-  .garbage-cards {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-  }
+.garbage-cards {
+grid-template-columns: repeat(4, 1fr);
+gap: 20px;
+margin-bottom: 30px;
+}
 
-  .garbage-card {
-    padding: 24px;
-    min-height: 160px;
-  }
+.garbage-card {
+padding: 24px;
+min-height: 160px;
+}
 
-  .card-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-  }
+.card-icon {
+width: 60px;
+height: 60px;
+font-size: 1.8rem;
+margin-bottom: 16px;
+}
 
-  .card-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
+.card-title {
+font-size: 1.2rem;
+margin-bottom: 10px;
+}
 
-  .card-desc {
-    font-size: 0.9rem;
-  }
+.card-desc {
+font-size: 0.9rem;
+}
 
-  .quick-actions {
-    padding: 30px;
-  }
+.quick-actions {
+padding: 30px;
+}
 
-  .actions-title {
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-  }
+.actions-title {
+font-size: 1.4rem;
+margin-bottom: 20px;
+}
 
-  .actions-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
+.actions-grid {
+grid-template-columns: repeat(4, 1fr);
+gap: 20px;
+}
 
-  .action-btn {
-    padding: 20px 16px;
-    font-size: 1rem;
-  }
+.action-btn {
+padding: 20px 16px;
+font-size: 1rem;
+}
 
-  .action-icon {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-  }
+.action-icon {
+font-size: 1.5rem;
+margin-bottom: 12px;
+}
 }
 
 <script setup>
@@ -1499,6 +1478,6 @@ onUnmounted(() => {
   if (autoPlayTimer) {
     clearInterval(autoPlayTimer);
   }
-  window.removeEventListener('resize', () => {});
+  window.removeEventListener('resize', () => { });
 });
 </script>
