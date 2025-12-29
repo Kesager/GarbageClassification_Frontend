@@ -81,6 +81,25 @@
 }
 
 /* ===== 页面头部 ===== */
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
+}
+
 .page-header {
   background: linear-gradient(135deg, var(--color-primary-50), var(--bg-primary));
   border-bottom-left-radius: var(--border-radius-3xl);

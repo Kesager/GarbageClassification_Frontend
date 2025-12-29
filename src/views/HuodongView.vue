@@ -117,10 +117,30 @@
 .activity-page {
   min-height: 100vh;
   background-color: var(--bg-secondary);
-  padding-bottom: 6rem; /* 为导航栏留出空间 */
+  padding-bottom: 6rem;
+  /* 为导航栏留出空间 */
 }
 
 /* ===== 页面头部 ===== */
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
+}
+
 .page-header {
   background: linear-gradient(135deg, var(--color-primary-50), var(--bg-primary));
   border-bottom-left-radius: var(--border-radius-3xl);
@@ -180,8 +200,15 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* ===== 活动区域 ===== */
@@ -316,7 +343,8 @@
   color: var(--text-secondary);
 }
 
-.participants, .reward {
+.participants,
+.reward {
   display: flex;
   align-items: center;
   gap: var(--space-1);
