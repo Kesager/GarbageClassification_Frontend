@@ -12,42 +12,40 @@
 
     <!-- 用户信息卡片 -->
     <section class="user-profile-section">
-      <div class="container">
-        <div class="profile-card">
-          <div class="profile-header">
-            <div class="avatar-section">
-              <div class="avatar-placeholder">
-                <div class="avatar-icon">👤</div>
-              </div>
-              <div class="user-info">
-                <div class="username">环保小卫士</div>
-                <div class="user-level">
-                  <span class="level-badge">Lv.8</span>
-                  <span class="level-desc">环保达人</span>
-                </div>
+      <!-- ... (用户信息卡片内容保持不变) ... -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar-section">
+            <div class="avatar-placeholder">
+              <div class="avatar-icon">👤</div>
+            </div>
+            <div class="user-info">
+              <div class="username">环保小卫士</div>
+              <div class="user-level">
+                <span class="level-badge">Lv.8</span>
+                <span class="level-desc">环保达人</span>
               </div>
             </div>
-            <button class="edit-btn" @click="editProfile">
-              <span class="edit-icon">✏️</span>
-              编辑
-            </button>
           </div>
-
-          <div class="stats-row">
-            <div class="stat-item">
-              <div class="stat-value">1,234</div>
-              <div class="stat-label">积分</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <div class="stat-value">89</div>
-              <div class="stat-label">天数</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <div class="stat-value">12</div>
-              <div class="stat-label">成就</div>
-            </div>
+          <button class="edit-btn" @click="editProfile">
+            <span class="edit-icon">✏️</span>
+            编辑
+          </button>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-value">1,234</div>
+            <div class="stat-label">积分</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value">89</div>
+            <div class="stat-label">天数</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">成就</div>
           </div>
         </div>
       </div>
@@ -57,7 +55,8 @@
     <section class="menu-section">
       <div class="container">
         <div class="menu-list">
-          <div class="menu-item" @click="openFeature('favorites')">
+          <!-- 修改：点击直接跳转，不再调用 openFeature -->
+          <div class="menu-item" @click="router.push('/shoucang')">
             <div class="menu-icon">❤️</div>
             <div class="menu-content">
               <div class="menu-title">我的收藏</div>
@@ -350,7 +349,6 @@
   width: 1px;
   height: 2.5rem;
   background-color: var(--border-color);
-  flex-shrink: 0;
 }
 
 /* ===== 功能菜单 ===== */
@@ -438,7 +436,7 @@
 .logout-btn {
   width: 100%;
   background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
-  color: var(--text-primary);
+  color: var(--text-inverse);
   border: none;
   border-radius: var(--border-radius-xl);
   padding: var(--space-4);
@@ -456,10 +454,8 @@
 
 .logout-btn:hover {
   transform: translateY(-1px);
-  color: var(--text-inverse);
   box-shadow: var(--shadow-md);
   background: linear-gradient(135deg, var(--color-error-dark), var(--color-error));
-  background-color: var(--color-harmful);
 }
 
 .logout-btn:active {
@@ -736,6 +732,10 @@
 </style>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 // 编辑资料
 const editProfile = () => {
   alert('编辑资料功能即将上线！');
@@ -743,11 +743,32 @@ const editProfile = () => {
 
 // 打开功能
 const openFeature = (feature) => {
+  // 移除了 'favorites' 的处理逻辑，因为它现在直接跳转
+
+  if (feature === 'share') {
+    // 分享给朋友功能
+    const shareText = `我正在使用校园垃圾分类助手，快来一起参与环保行动吧！\n${window.location.href}`;
+    if (navigator.share) {
+      navigator.share({
+        title: '校园垃圾分类助手',
+        text: shareText,
+        url: window.location.href
+      }).catch(console.error);
+    } else {
+      // 降级到复制到剪贴板
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert('分享链接已复制到剪贴板！');
+      }).catch(() => {
+        alert('分享失败，请手动复制链接');
+      });
+    }
+    return;
+  }
+  
+  // 其他功能保持"即将上线"提示
   const messages = {
-    favorites: '我的收藏功能即将上线！',
     alarm: '倒垃圾闹钟功能即将上线！',
     map: '垃圾地图定位功能即将上线！',
-    share: '分享给朋友功能即将上线！',
     settings: '系统设置功能即将上线！',
     about: '关于我们页面即将上线！'
   };

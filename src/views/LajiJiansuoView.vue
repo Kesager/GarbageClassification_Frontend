@@ -28,9 +28,12 @@
               <span class="icon-emoji">{{ getCurrentEmoji() }}</span>
             </div>
             <div class="result-actions">
-              <button class="share-btn" @click="shareResult" title="分享结果">
-                📤
+              <button class="favorite-btn" @click="toggleFavorite">
+                {{ isFavorite ? '❤️' : '♡' }}
               </button>
+              <!-- <button class="share-btn" @click="shareResult" title="分享结果">
+                📤
+              </button> -->
             </div>
           </div>
           <div class="result-content">
@@ -69,8 +72,14 @@
         </div>
       </div>
     </section>
+
+    <!-- 收藏成功提示弹窗 -->
+    <div v-if="showFavoriteToast" class="favorite-toast">
+      <p>收藏成功，可在<router-link to="/shoucang" @click="showFavoriteToast = false" class="toast-link">我的收藏</router-link>中查看</p>
+    </div>
   </div>
 </template>
+
 <style scoped>
 /* ===== 页面布局 ===== */
 .search-page {
@@ -100,6 +109,8 @@
   }
 }
 
+
+/* ===== 页面头部 ===== */
 .page-header {
   background: linear-gradient(135deg, var(--color-primary-50), var(--bg-primary));
   border-bottom-left-radius: var(--border-radius-3xl);
@@ -277,6 +288,30 @@
 .result-actions {
   display: flex;
   gap: var(--space-2);
+}
+
+.favorite-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: var(--text-lg);
+}
+
+.favorite-btn:hover {
+  background-color: var(--color-primary-200);
+  transform: scale(1.05);
+}
+
+.favorite-btn:active {
+  transform: scale(0.95);
 }
 
 .share-btn {
@@ -463,6 +498,46 @@
 
 .hot-item.other {
   border-left: 3px solid var(--color-other);
+}
+
+/* 收藏成功提示弹窗样式 */
+.favorite-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-3) var(--space-5);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.favorite-toast p {
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.toast-link {
+  color: var(--color-primary-600);
+  font-weight: var(--font-semibold);
+  text-decoration: underline;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* ===== 响应式设计 ===== */
@@ -957,9 +1032,11 @@
 </style>
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 // 获取路由实例
 const route = useRoute()
+const router = useRouter()
 // 响应式数据
 const searchQuery = ref('')
 const activeItem = ref('')
@@ -967,6 +1044,7 @@ const currentIconClass = ref('kitchen-waste')
 const currentTitle = ref('厨余垃圾')
 const currentExample = ref('示例：剩菜、骨头、果壳等')
 const currentTips = ref('投放提示：沥干水分后投放')
+const showFavoriteToast = ref(false)
 // 垃圾分类数据
 const garbageTypes = {
   'leftover-item': {
@@ -1050,6 +1128,14 @@ const garbageTypes = {
     category: 'recyclable'
   }
 }
+
+// 计算是否已收藏
+const isFavorite = computed(() => {
+  if (!activeItem.value) return false
+  const favorites = JSON.parse(localStorage.getItem('garbageFavorites') || '[]')
+  return favorites.some(item => item.id === activeItem.value)
+})
+
 // 计算属性：过滤后的热门搜索项
 const filteredHotItems = computed(() => {
   if (!searchQuery.value.trim()) {
@@ -1126,6 +1212,35 @@ const shareResult = () => {
     })
   }
 }
+
+// 收藏功能
+const toggleFavorite = () => {
+  const currentItem = activeItem.value ? garbageTypes[activeItem.value] : null
+  if (!currentItem) return
+
+  const favorites = JSON.parse(localStorage.getItem('garbageFavorites') || '[]')
+  const isAlreadyFavorite = favorites.some(item => item.id === activeItem.value)
+
+  if (isAlreadyFavorite) {
+    // 取消收藏
+    const updatedFavorites = favorites.filter(item => item.id !== activeItem.value)
+    localStorage.setItem('garbageFavorites', JSON.stringify(updatedFavorites))
+    alert('已取消收藏')
+  } else {
+    // 添加收藏
+    favorites.push({
+      id: activeItem.value,
+      ...currentItem
+    })
+    localStorage.setItem('garbageFavorites', JSON.stringify(favorites))
+    showFavoriteToast.value = true
+    // 5秒后自动关闭提示
+    setTimeout(() => {
+      showFavoriteToast.value = false
+    }, 5000)
+  }
+}
+
 // 获取当前显示的emoji
 const getCurrentEmoji = () => {
   if (activeItem.value && garbageTypes[activeItem.value]) {

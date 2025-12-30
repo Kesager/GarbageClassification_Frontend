@@ -33,6 +33,11 @@ const router = createRouter({
       name: 'scanner',
       component: () => import('../views/ScannerView.vue'),
     },
+    {
+      path: '/shoucang',
+      name: 'shoucang',
+      component: () => import('../views/ShoucangView.vue'),
+    },
   ],
 })
 
