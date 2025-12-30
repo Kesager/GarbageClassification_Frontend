@@ -31,9 +31,6 @@
               <button class="favorite-btn" @click="toggleFavorite">
                 {{ isFavorite ? '❤️' : '♡' }}
               </button>
-              <!-- <button class="share-btn" @click="shareResult" title="分享结果">
-                📤
-              </button> -->
             </div>
           </div>
           <div class="result-content">
@@ -1045,87 +1042,399 @@ const currentTitle = ref('厨余垃圾')
 const currentExample = ref('示例：剩菜、骨头、果壳等')
 const currentTips = ref('投放提示：沥干水分后投放')
 const showFavoriteToast = ref(false)
-// 垃圾分类数据
+// 垃圾分类数据（共50种）
 const garbageTypes = {
   'leftover-item': {
     iconClass: 'kitchen-waste',
-    title: '厨余垃圾',
-    example: '示例：剩菜、骨头、果壳等',
-    tips: '投放提示：沥干水分后投放',
+    title: '剩菜剩饭',
+    example: '示例：米饭、炒菜、汤羹等',
+    tips: '投放提示：沥干水分，去除包装物',
     emoji: '🥬',
     category: 'kitchen'
   },
   'carton-item': {
     iconClass: 'recyclable-waste',
-    title: '可回收物',
-    example: '示例：纸箱、报纸、塑料等',
-    tips: '投放提示：压扁后投放',
+    title: '纸箱',
+    example: '示例：快递盒、鞋盒、纸箱等',
+    tips: '投放提示：压扁捆扎，去除胶带',
     emoji: '📦',
     category: 'recyclable'
   },
   'toilet-paper-item': {
     iconClass: 'other-waste',
-    title: '其他垃圾',
-    example: '示例：卫生纸、餐巾纸等',
-    tips: '投放提示：无特殊要求',
+    title: '卫生纸',
+    example: '示例：卷纸、抽纸、餐巾纸等',
+    tips: '投放提示：直接投放即可',
     emoji: '🧻',
     category: 'other'
   },
   'glass-jar-item': {
     iconClass: 'recyclable-waste',
-    title: '可回收物',
-    example: '示例：玻璃罐、瓶子等',
-    tips: '投放提示：清洁干净后投放',
+    title: '玻璃罐',
+    example: '示例：果酱瓶、调料瓶、玻璃杯等',
+    tips: '投放提示：清空内容物，冲洗干净',
     emoji: '🍶',
     category: 'recyclable'
   },
   'tube-item': {
     iconClass: 'harmful-waste',
-    title: '有害垃圾',
-    example: '示例：废旧灯管、荧光灯等',
-    tips: '投放提示：小心轻放',
+    title: '废旧灯管',
+    example: '示例：荧光灯、节能灯、灯管等',
+    tips: '投放提示：轻拿轻放，破损需包裹',
     emoji: '💡',
     category: 'harmful'
   },
   'bone-item': {
     iconClass: 'kitchen-waste',
-    title: '厨余垃圾',
-    example: '示例：骨头、鱼刺等',
-    tips: '投放提示：沥干水分后投放',
+    title: '骨头',
+    example: '示例：轻拿轻放，破损需包裹',
+    tips: '投放提示：大块骨头需敲碎',
     emoji: '🦴',
     category: 'kitchen'
   },
   'can-item': {
     iconClass: 'recyclable-waste',
-    title: '可回收物',
-    example: '示例：易拉罐、金属罐等',
-    tips: '投放提示：压扁后投放',
+    title: '易拉罐',
+    example: '示例：可乐罐、啤酒罐、金属罐等',
+    tips: '投放提示：压扁罐体，清空残留液体',
     emoji: '🥫',
     category: 'recyclable'
   },
   'ceramic-item': {
     iconClass: 'other-waste',
-    title: '其他垃圾',
-    example: '示例：陶瓷碗、盘子等',
-    tips: '投放提示：破碎后投放',
+    title: '陶瓷碗',
+    example: '示例：碎瓷碗、陶瓷盘、瓦片等',
+    tips: '投放提示：破碎物品需用报纸包裹',
     emoji: '🏺',
     category: 'other'
   },
   'cosmetic-item': {
     iconClass: 'harmful-waste',
-    title: '有害垃圾',
-    example: '示例：过期化妆品、指甲油等',
-    tips: '投放提示：请勿混合投放',
+    title: '过期化妆品',
+    example: '示例：面霜、指甲油、染发剂等',
+    tips: '投放提示：拧紧瓶盖，避免液体泄漏',
     emoji: '💄',
     category: 'harmful'
   },
   'clothes-item': {
     iconClass: 'recyclable-waste',
-    title: '可回收物',
-    example: '示例：旧衣服、布料等',
-    tips: '投放提示：清洁干净后投放',
+    title: '旧衣服',
+    example: '示例：T恤、裤子、床单、窗帘等',
+    tips: '投放提示：清洗干净，折叠整齐',
     emoji: '👕',
     category: 'recyclable'
+  },
+  'apple-core-item': {
+    iconClass: 'kitchen-waste',
+    title: '水果皮',
+    example: '示例：苹果核、香蕉皮、西瓜皮等',
+    tips: '投放提示：沥干水分后投放',
+    emoji: '🍎',
+    category: 'kitchen'
+  },
+  'banana-peel-item': {
+    iconClass: 'kitchen-waste',
+    title: '蔬菜叶',
+    example: '示例：白菜叶、菠菜叶、菜叶等',
+    tips: '投放提示：去除泥土后投放',
+    emoji: '🥬',
+    category: 'kitchen'
+  },
+  'egg-shell-item': {
+    iconClass: 'kitchen-waste',
+    title: '鸡蛋壳',
+    example: '示例：鸡蛋壳、鸭蛋壳等',
+    tips: '投放提示：清洗干净后投放',
+    emoji: '🥚',
+    category: 'kitchen'
+  },
+  'fish-bone-item': {
+    iconClass: 'kitchen-waste',
+    title: '鱼骨',
+    example: '示例：鲫鱼骨、草鱼骨等',
+    tips: '投放提示：用纸巾包裹后投放',
+    emoji: '🐟',
+    category: 'kitchen'
+  },
+  'coffee-grounds-item': {
+    iconClass: 'kitchen-waste',
+    title: '茶叶渣',
+    example: '示例：泡过的茶叶、茶包等',
+    tips: '投放提示：沥干水分后投放',
+    emoji: '🍵',
+    category: 'kitchen'
+  },
+  'tea-leaf-item': {
+    iconClass: 'kitchen-waste',
+    title: '咖啡渣',
+    example: '示例：咖啡粉残渣、咖啡渣等',
+    tips: '投放提示：沥干水分后投放',
+    emoji: '☕',
+    category: 'kitchen'
+  },
+  'bread-item': {
+    iconClass: 'kitchen-waste',
+    title: '过期面包',
+    example: '示例：面包、蛋糕、饼干等',
+    tips: '投放提示：密封包装破损后投放',
+    emoji: '🍞',
+    category: 'kitchen'
+  },
+  'vegetable-peel-item': {
+    iconClass: 'kitchen-waste',
+    title: '剩余米饭',
+    example: '示例：白米饭、糯米饭等',
+    tips: '投放提示：沥干水分后投放',
+    emoji: '🍚',
+    category: 'kitchen'
+  },
+  'meat-scrap-item': {
+    iconClass: 'kitchen-waste',
+    title: '剩余面条',
+    example: '示例：面条、米线、粉丝等',
+    tips: '投放提示：沥干水分后投放',
+    emoji: '🍜',
+    category: 'kitchen'
+  },
+  'milk-box-item': {
+    iconClass: 'recyclable-waste',
+    title: '瓜子壳',
+    example: '示例：西瓜子壳、葵花籽壳等',
+    tips: '投放提示：直接投放',
+    emoji: '🌻',
+    category: 'kitchen'
+  },
+  'newspaper-item': {
+    iconClass: 'recyclable-waste',
+    title: '纸类',
+    example: '示例：报纸、杂志、宣传单等',
+    tips: '投放提示：捆扎整齐后投放',
+    emoji: '📰',
+    category: 'recyclable'
+  },
+  'plastic-bottle-item': {
+    iconClass: 'recyclable-waste',
+    title: '塑料瓶',
+    example: '示例：矿泉水瓶、饮料瓶等',
+    tips: '投放提示：清空内容物、拧盖后投放',
+    emoji: '🚰',
+    category: 'recyclable'
+  },
+  'aluminum-foil-item': {
+    iconClass: 'recyclable-waste',
+    title: '铝箔纸',
+    example: '示例：锡纸、锡箔纸等',
+    tips: '投放提示：清洁干净、揉成团后投放',
+    emoji: '🥡',
+    category: 'recyclable'
+  },
+  'old-book-item': {
+    iconClass: 'recyclable-waste',
+    title: '旧书籍',
+    example: '示例：旧书、旧课本、旧练习册等',
+    tips: '投放提示：捆扎整齐后投放',
+    emoji: '📚',
+    category: 'recyclable'
+  },
+  'cardboard-item': {
+    iconClass: 'recyclable-waste',
+    title: '不锈钢制品',
+    example: '示例：锅铲、饭盒、水杯等',
+    tips: '投放提示：清洗干净后投放',
+    emoji: '🍳',
+    category: 'recyclable'
+  },
+  'scrap-iron-item': {
+    iconClass: 'recyclable-waste',
+    title: '铁制品',
+    example: '示例：铁钉、铁丝、铁皮等',
+    tips: '投放提示：整理捆绑后投放',
+    emoji: '🔩',
+    category: 'recyclable'
+  },
+  'copper-wire-item': {
+    iconClass: 'recyclable-waste',
+    title: '铜制品',
+    example: '示例：铜电线、铜管等',
+    tips: '投放提示：去除绝缘层后投放',
+    emoji: '🔌',
+    category: 'recyclable'
+  },
+  'lead-acid-battery-item': {
+    iconClass: 'harmful-waste',
+    title: '铅酸电池',
+    example: '示例：汽车电瓶、电动车电池等',
+    tips: '投放提示：放入专用回收箱',
+    emoji: '🔋',
+    category: 'harmful'
+  },
+  'button-battery-item': {
+    iconClass: 'harmful-waste',
+    title: '纽扣电池',
+    example: '示例：手表电池、遥控器电池等',
+    tips: '投放提示：用胶带包裹正负极后投放',
+    emoji: '🔌',
+    category: 'harmful'
+  },
+  'expired-medicine-item': {
+    iconClass: 'harmful-waste',
+    title: '过期药品',
+    example: '示例：过期感冒药、抗生素等',
+    tips: '投放提示：连同包装一起投放',
+    emoji: '💊',
+    category: 'harmful'
+  },
+  'thermometer-item': {
+    iconClass: 'harmful-waste',
+    title: '体温计',
+    example: '示例：水银温度计、电子体温计等',
+    tips: '投放提示：破损需密封后投放',
+    emoji: '🌡️',
+    category: 'harmful'
+  },
+  'paint-item': {
+    iconClass: 'harmful-waste',
+    title: '油漆涂料',
+    example: '示例：油漆、涂料、稀料等',
+    tips: '投放提示：密封后投放，避免泄漏',
+    emoji: '🎨',
+    category: 'harmful'
+  },
+  'insecticide-item': {
+    iconClass: 'harmful-waste',
+    title: '杀虫剂',
+    example: '示例：喷雾杀虫剂、蟑螂药、除草剂、老鼠药等',
+    tips: '投放提示：密封原包装后投放',
+    emoji: '🐜',
+    category: 'harmful'
+  },
+  'hair-spray-item': {
+    iconClass: 'harmful-waste',
+    title: '压力容器',
+    example: '示例：发胶、摩丝、杀虫剂等',
+    tips: '投放提示：排空内容物后投放',
+    emoji: '💇',
+    category: 'harmful'
+  },
+  'nail-polish-item': {
+    iconClass: 'harmful-waste',
+    title: '过期指甲油',
+    example: '示例：指甲油、洗甲水等',
+    tips: '投放提示：密封后投放',
+    emoji: '💅',
+    category: 'harmful'
+  },
+  'disposable-chopsticks-item': {
+    iconClass: 'other-waste',
+    title: '一次性用品',
+    example: '示例：一次性筷子、牙签等',
+    tips: '投放提示：直接投放即可',
+    emoji: '🥢',
+    category: 'other'
+  },
+  'face-mask-item': {
+    iconClass: 'other-waste',
+    title: '口罩',
+    example: '示例：一次性口罩、医用口罩等',
+    tips: '投放提示：对折密封后投放',
+    emoji: '😷',
+    category: 'other'
+  },
+  'cigarette-butts-item': {
+    iconClass: 'other-waste',
+    title: '烟蒂',
+    example: '示例：烟头、烟盒内锡纸等',
+    tips: '投放提示：确保熄灭后投放',
+    emoji: '🚬',
+    category: 'other'
+  },
+  'broken-plate-item': {
+    iconClass: 'other-waste',
+    title: '碎瓷器',
+    example: '示例：碎盘子、碎碗等',
+    tips: '投放提示：用报纸包裹后投放',
+    emoji: '🍽️',
+    category: 'other'
+  },
+  'toothbrush-item': {
+    iconClass: 'other-waste',
+    title: '洗漱用品',
+    example: '示例：旧牙刷、牙膏皮等',
+    tips: '投放提示：直接投放即可',
+    emoji: '🦷',
+    category: 'other'
+  },
+  'sponge-item': {
+    iconClass: 'other-waste',
+    title: '海绵',
+    example: '示例：洗碗海绵、清洁海绵等',
+    tips: '投放提示：直接投放即可',
+    emoji: '🧽',
+    category: 'other'
+  },
+  'incense-ash-item': {
+    iconClass: 'other-waste',
+    title: '香灰',
+    example: '示例：香烛灰烬、纸钱灰烬等',
+    tips: '投放提示：冷却后用容器装好投放',
+    emoji: '🔥',
+    category: 'other'
+  },
+  'pet-feces-item': {
+    iconClass: 'other-waste',
+    title: '宠物粪便',
+    example: '示例：狗粪、猫砂等',
+    tips: '投放提示：袋装后投放',
+    emoji: '🐶',
+    category: 'other'
+  },
+  'plastic-bag-item': {
+    iconClass: 'other-waste',
+    title: '袋子类',
+    example: '示例：塑料袋、保鲜膜等',
+    tips: '投放提示：尽量多次使用后投放',
+    emoji: '🛍️',
+    category: 'other'
+  },
+  'rubber-gloves-item': {
+    iconClass: 'other-waste',
+    title: '手套类',
+    example: '示例：橡胶手套、乳胶手套等',
+    tips: '投放提示：直接投放即可',
+    emoji: '🧤',
+    category: 'other'
+  },
+  'sticker-item': {
+    iconClass: 'other-waste',
+    title: '纸类废弃物',
+    example: '示例：贴纸、标签、胶带等',
+    tips: '投放提示：撕下后投放',
+    emoji: '🏷️',
+    category: 'other'
+  },
+  'candle-item': {
+    iconClass: 'other-waste',
+    title: '蜡类',
+    example: '示例：蜡烛、蜡笔等',
+    tips: '投放提示：直接投放即可',
+    emoji: '🕯️',
+    category: 'other'
+  },
+  'balloon-item': {
+    iconClass: 'other-waste',
+    title: '气球',
+    example: '示例：橡胶气球、氦气球等',
+    tips: '投放提示：放气后投放',
+    emoji: '🎈',
+    category: 'other'
+  },
+  'matches-item': {
+    iconClass: 'other-waste',
+    title: '胶棒',
+    example: '示例：固体胶、胶水棒等',
+    tips: '投放提示：用完后投放',
+    emoji: '✂️',
+    category: 'other'
   }
 }
 
