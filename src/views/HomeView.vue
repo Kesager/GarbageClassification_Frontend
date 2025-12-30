@@ -28,7 +28,7 @@
           <div class="swiper-inner">
             <div class="swiper-wrapper" ref="swiperWrapper">
               <div class="swiper-slide" v-for="(slide, index) in slides" :key="index">
-                <img :src="slide" alt="垃圾分类宣传图" class="slide-img">
+                <img :src="slide.image" alt="垃圾分类宣传图" class="slide-img">
                 <div class="slide-overlay">
                   <div class="slide-content">
                     <h3 class="slide-title">{{ slide.title }}</h3>
@@ -320,7 +320,7 @@
 }
 
 .slide-img {
-  width: 100%;
+  margin: auto;
   height: 100%;
   object-fit: cover;
 }
