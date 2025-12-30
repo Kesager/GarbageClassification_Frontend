@@ -40,6 +40,10 @@
   --color-harmful-light: #fef2f2;
   --color-harmful-dark: #dc2626;
 
+  --color-error:var(--color-harmful);      /* 有害垃圾 - 红色 */
+  --color-error-light:var(--color-harmful-light);
+  --color-error-dark: var(--color-harmful-dark);
+
   --color-other: #6b7280;        /* 其他垃圾 - 灰色 */
   --color-other-light: #f3f4f6;
   --color-other-dark: #374151;

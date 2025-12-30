@@ -13,7 +13,7 @@
     <!-- 用户信息卡片 -->
     <section class="user-profile-section">
       <!-- ... (用户信息卡片内容保持不变) ... -->
-      <div class="profile-card">
+      <div class="profile-card container">
         <div class="profile-header">
           <div class="avatar-section">
             <div class="avatar-placeholder">

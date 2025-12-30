@@ -31,6 +31,7 @@
             v-for="(item, index) in favorites" 
             :key="item.id" 
             :class="['favorite-item', item.category]"
+            :data-id="item.id"
           >
             <div class="item-icon">{{ item.emoji }}</div>
             <div class="item-content">
@@ -38,41 +39,42 @@
               <div class="item-desc">{{ getCategoryText(item.category) }}</div>
               <div class="item-detail">{{ item.example }}</div>
             </div>
-            <div class="item-actions">
-              <!-- 引入删除收藏组件 -->
-              <DeleteFavoriteButton 
-                @confirm-delete="removeFavorite(index)" 
-                :aria-label="`删除${item.title}收藏`"
-              />
-            </div>
+            <!-- 删除收藏按钮 -->
+            <button 
+              class="delete-btn" 
+              @click="showDeleteDialog(item.id, item.title)" 
+              :aria-label="`删除${item.title}收藏`"
+            >
+              <span class="delete-icon">删除</span>
+            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 删除收藏按钮组件模板 -->
-    <template id="DeleteFavoriteButton">
-      <button 
-        class="delete-btn" 
-        @click="handleClick" 
-        :aria-label="ariaLabel"
-      >
-        <span class="delete-icon">🗑️</span>
-      </button>
-    </template>
+    <!-- 删除确认对话框 -->
+    <div v-if="showDeleteConfirm" class="delete-confirm-modal">
+      <div class="modal-content">
+        <h3 class="modal-title">取消收藏</h3>
+        <p class="modal-message">确定要取消收藏"{{ deletingItemTitle }}"吗？</p>
+        <div class="modal-buttons">
+          <button class="modal-btn cancel-btn" @click="cancelDelete">取消</button>
+          <button class="modal-btn confirm-btn" @click="confirmDelete">确认</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* 原有样式保持不变 */
-/* ===== 页面基础样式 ===== */
+/* 页面基础样式 */
 .favorites-page {
   min-height: 100vh;
   background-color: var(--bg-secondary);
   padding-bottom: 6rem; /* 为底部导航留出空间 */
 }
 
-/* ===== 页面头部样式 ===== */
+/* 页面头部样式 */
 .page-header {
   background: linear-gradient(135deg, var(--color-primary-50), var(--bg-primary));
   border-bottom-left-radius: var(--border-radius-3xl);
@@ -135,7 +137,7 @@
   line-height: 1.4;
 }
 
-/* ===== 收藏列表区域 ===== */
+/* 收藏列表区域 */
 .favorites-section {
   margin-bottom: var(--space-12);
 }
@@ -212,6 +214,22 @@
   gap: var(--space-3);
   position: relative;
   overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 删除动画效果 */
+.favorite-item.deleting {
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(10px); height: 0; padding: 0; margin: 0; overflow: hidden; }
 }
 
 .favorite-item::before {
@@ -276,25 +294,19 @@
   font-size: var(--text-xs);
   color: var(--text-muted);
   line-height: 1.4;
-  /* 标准属性（现代浏览器支持） */
-  display: -webkit-box; /* WebKit私有：弹性盒模型 */
-  display: box; /* 早期标准写法 */
-  -webkit-line-clamp: 2; /* WebKit私有：限制显示行数 */
-  line-clamp: 2; /* 标准属性：限制显示行数 */
-  -webkit-box-orient: vertical; /* WebKit私有：设置弹性盒方向为垂直 */
-  box-orient: vertical; /* 早期标准写法 */
-  overflow: hidden; /* 隐藏溢出内容 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* ===== 删除按钮样式 ===== */
-.item-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
+/* 删除按钮样式 */
 
 .delete-btn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
   width: 2rem;
   height: 2rem;
   border: none;
@@ -319,7 +331,87 @@
   transform: scale(0.9);
 }
 
-/* ===== 响应式设计 ===== */
+/* 删除确认对话框样式 */
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-6);
+  width: 90%;
+  max-width: 300px;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn 0.2s ease-in-out;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  text-align: center;
+}
+
+.modal-message {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.modal-btn {
+  flex: 1;
+  padding: var(--space-3);
+  border-radius: var(--border-radius-lg);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  font-size: var(--text-base);
+}
+
+.cancel-btn {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.cancel-btn:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.confirm-btn {
+  background-color: var(--color-harmful);
+  color: var(--text-inverse);
+  border: none;
+}
+
+.confirm-btn:hover {
+  background-color: var(--color-harmful-dark);
+}
+
+/* 响应式设计 */
 @media (max-width: 640px) {
   .favorites-page { padding-bottom: 5rem; }
   .page-header { margin-bottom: var(--space-6); padding: var(--space-6) 0; }
@@ -357,38 +449,18 @@
 </style>
 
 <script setup>
-import { ref, onMounted, defineComponent } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
-// 定义删除收藏按钮组件（改用Vue模板写法，避免JSX编译错误）
-const DeleteFavoriteButton = defineComponent({
-  template: '#DeleteFavoriteButton', // 关联模板ID
-  emits: ['confirm-delete'],
-  props: {
-    ariaLabel: {
-      type: String,
-      default: '删除此收藏'
-    }
-  },
-  setup(props, { emit }) {
-    const handleClick = () => {
-      if (confirm('确定要取消收藏吗？')) {
-        emit('confirm-delete')
-      }
-    }
-
-    return {
-      handleClick,
-      props // 暴露props供模板使用
-    }
-  }
-})
 
 // 路由实例
 const router = useRouter()
 
 // 收藏列表数据
 const favorites = ref([])
+// 删除确认相关状态
+const showDeleteConfirm = ref(false)
+const deletingItemId = ref(null)
+const deletingItemTitle = ref('')
 
 // 返回上一页
 const goBack = () => {
@@ -399,21 +471,69 @@ const goBack = () => {
 const loadFavorites = () => {
   const saved = localStorage.getItem('garbageFavorites')
   if (saved) {
-    favorites.value = JSON.parse(saved)
+    try {
+      favorites.value = JSON.parse(saved)
+    } catch (e) {
+      console.error('Failed to parse favorites from localStorage:', e)
+      favorites.value = []
+    }
   }
 }
 
 // 保存收藏数据到本地存储
 const saveFavorites = () => {
-  localStorage.setItem('garbageFavorites', JSON.stringify(favorites.value))
+  try {
+    localStorage.setItem('garbageFavorites', JSON.stringify(favorites.value))
+  } catch (e) {
+    console.error('Failed to save favorites to localStorage:', e)
+  }
 }
 
-// 移除收藏
-const removeFavorite = (index) => {
-  // 从数组中移除该项，Vue的响应式系统会自动更新视图
-  favorites.value.splice(index, 1)
-  // 将更新后的数组保存到本地存储
-  saveFavorites()
+// 显示删除确认对话框
+const showDeleteDialog = (id, title) => {
+  deletingItemId.value = id
+  deletingItemTitle.value = title
+  showDeleteConfirm.value = true
+}
+
+// 取消删除
+const cancelDelete = () => {
+  showDeleteConfirm.value = false
+  deletingItemId.value = null
+  deletingItemTitle.value = ''
+}
+
+// 确认删除
+const confirmDelete = () => {
+  if (deletingItemId.value !== null) {
+    // 找到要删除的项目索引
+    const index = favorites.value.findIndex(item => item.id === deletingItemId.value)
+    if (index !== -1) {
+      // 添加删除动画类
+      const itemElement = document.querySelector(`.favorite-item[data-id="${deletingItemId.value}"]`)
+      if (itemElement) {
+        itemElement.classList.add('deleting')
+        
+        // 等待动画完成后再从数据中移除
+        setTimeout(() => {
+          favorites.value.splice(index, 1)
+          saveFavorites()
+          
+          // 重置删除状态
+          showDeleteConfirm.value = false
+          deletingItemId.value = null
+          deletingItemTitle.value = ''
+        }, 300) // 与动画持续时间一致
+      } else {
+        // 如果找不到元素，直接删除
+        favorites.value.splice(index, 1)
+        saveFavorites()
+        showDeleteConfirm.value = false
+        deletingItemId.value = null
+        deletingItemTitle.value = ''
+      }
+    }
+  }
 }
 
 // 跳转到搜索页
